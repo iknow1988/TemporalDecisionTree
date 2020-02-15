@@ -1,0 +1,46 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+version = '1.0'
+
+sourceCompatibility = 1.7
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/Project'
+        }
+        resources {
+            srcDir 'src/'
+        }
+    }
+}
+
+task run(type: JavaExec, dependsOn:jar) {
+    main = 'Project.Main'
+    classpath = sourceSets.main.runtimeClasspath
+
+    // args '-g' // this line will launch a GUI version and ignore the following args
+    args '-b'
+    args '-t', '/Users/shiqiezi/Workspace/ChinaUnicom/masterproject/data/TraceData/10000_runtime.csv'
+    args '-w', '6'
+    args '-l', '10000'
+    args '-r', '0.1'
+    args '-c', System.getenv('NUMBER_THREADS')
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Temporal Decision Tree',
+                   'Implementation-Version': version,
+                   'Main-Class': 'Project.Main'
+    }
+}
+
+repositories.mavenCentral()
+
+dependencies {
+    compile group: 'commons-cli', name: 'commons-cli', version: '1.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.2'
+}
